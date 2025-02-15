@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery</title>
+  <link rel="stylesheet" href="gallery.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="logo">Five Years of Us</span>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="timeline.html">Timeline</a>
+                <a href="gallery.html" class="active">Gallery</a>
+                <a href="playlist.html">Playlist</a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="stars-container"></div>
+
+  <h1>Mollie and Wills Gallery</h1>
+  <div class="gallery" id="gallery"></div>
+  <div class="modal" id="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img id="modal-img" src="" style="display:none;">
+    <video id="modal-video" controls style="display:none;"></video>
+  </div>
+  <footer>
+    <p>Made with ❤️ for you</p>
+  </footer>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const gallery = document.getElementById("gallery");
+      const modal = document.getElementById("modal");
+      const modalImg = document.getElementById("modal-img");
+      const modalVideo = document.getElementById("modal-video");
+
+      const years = [2020, 2021, 2022, 2023, 2024, 2025];
+      const formats = ["jpg", "jpeg", "webp", "mp4"];
+      const totalImagesPerYear = { 2024: 120 };
+
+      years.forEach(year => {
+        let maxFiles = totalImagesPerYear[year] || 120;
+        for (let i = 1; i <= maxFiles; i++) {
+          formats.forEach(format => {
+            let filePath = `./images/gallery/${year}/${year} (${i}).${format}`;
+            let element;
+
+            if (format === "mp4") {
+              element = document.createElement("video");
+              element.controls = true;
+              element.src = filePath;
+              element.onclick = () => openModal(element.src, "video");
+              element.onerror = () => element.remove();
+            } else {
+              element = new Image();
+              element.src = filePath;
+              element.onclick = () => openModal(element.src, "image");
+              element.onerror = () => element.remove();
+            }
+            gallery.appendChild(element);
+          });
+        }
+      });
+
+      function openModal(src, type) {
+        modal.style.display = "flex";
+        if (type === "image") {
+          modalImg.src = src;
+          modalImg.style.display = "block";
+          modalVideo.style.display = "none";
+        } else {
+          modalVideo.src = src;
+          modalVideo.style.display = "block";
+          modalImg.style.display = "none";
+        }
+      }
+
+      function closeModal() {
+        modal.style.display = "none";
+      }
+    });
+  </script>
+  <script src="stars.js"></script>
+</body>
+</html>
